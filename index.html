@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashion Hub - Premium Fashion Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .logo i {
+      font-size: 32px;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-item {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.1);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+    }
+
+    .cart-count, .wishlist-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .search-box {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      padding: 8px 15px;
+      width: 250px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    /* Products Section */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    .wishlist-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wishlist-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .wishlist-btn.active {
+      background: #ff1744;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 12px;
+    }
+
+    .colors {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
+
+    .color-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.3s ease;
+    }
+
+    .color-dot:hover {
+      transform: scale(1.15);
+    }
+
+    .color-dot.selected {
+      border-color: #333;
+    }
+
+    .card-buttons {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 90%;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
+    .cart-container, .wishlist-container {
+      display: none;
+    }
+
+    .cart-container.active, .wishlist-container.active {
+      display: block;
+    }
+
+    .item-list {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .item {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .item-color {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .item-price {
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .remove-btn {
+      background: #ff6b6b;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .remove-btn:hover {
+      background: #ff1744;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #999;
+      padding: 30px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s ease;
+      z-index: 300;
+    }
+
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      z-index: 250;
+      border: none;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
+    }
+
+    .whatsapp-option {
+      width: 100%;
+      background: #25D366;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .whatsapp-option:hover {
+      background: #20BA5A;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Header & Navigation -->
+<header>
+  <div class="header-container">
+    <div class="logo">
+      <i class="fas fa-shopping-bag"></i>
+      <span>Fashion Hub</span>
+    </div>
+    
+    <div class="search-box">
+      <input type="text" placeholder="Search products...">
+      <i class="fas fa-search"></i>
+    </div>
+
+    <div class="nav-items">
+      <div class="nav-item" onclick="viewCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      
+      <div class="nav-item" onclick="viewWishlist()">
+        <i class="fas fa-heart"></i>
+        <span>Wishlist</span>
+        <span class="wishlist-count" id="wishlistCount">0</span>
+      </div>
+
+      <div class="nav-item user-profile" onclick="showLoginModal()">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <span id="userDisplay">Login</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+  <h2 class="section-title">✨ Trending Collection</h2>
+  <div class="products" id="productList"></div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span>Login to Your Account</span>
+      <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" required placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" required placeholder="Enter your password">
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span><i class="fas fa-shopping-cart"></i> Your Cart</span>
+      <button class="close-btn" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-container active">
+      <div class="item-list" id="cartList"></div>
+      <div class="total" id="cartTotal">Total: ₹0</div>
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      <button class="whatsapp-option" onclick="checkoutWhatsApp()">
+        <i class="fab fa-whatsapp"></i> Order on WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Wishlist Modal -->
+<div class="modal" id="wishlistModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span><i class="fas fa-heart"></i> Your Wishlist</span>
+      <button class="close-btn" onclick="closeWishlist()">&times;</button>
+    </div>
+    <div class="wishlist-container active">
+      <div class="item-list" id="wishlistList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating WhatsApp Button -->
+<a class="whatsapp-btn" href="https://wa.me/916300665054" target="_blank" title="Order on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+  // Data Management
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+  let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+  const products = [
+    {
+      id: 1,
+      name: "Premium Black Cap",
+      price: 299,
+      image: "https://via.placeholder.com/250?text=Black+Cap&bg=000000&fg=FFFFFF",
+      colors: ['#000000', '#FFFFFF', '#FF6B6B']
+    },
+    {
+      id: 2,
+      name: "Leather Belt",
+      price: 499,
+      image: "https://via.placeholder.com/250?text=Leather+Belt&bg=8B4513&fg=FFFFFF",
+      colors: ['#8B4513', '#000000', '#FFD700']
+    },
+    {
+      id: 3,
+      name: "Elegant Wallet",
+      price: 399,
+      image: "https://via.placeholder.com/250?text=Wallet&bg=654321&fg=FFFFFF",
+      colors: ['#654321', '#000000', '#8B0000']
+    },
+    {
+      id: 4,
+      name: "Sports Sneakers",
+      price: 1299,
+      image: "https://via.placeholder.com/250?text=Sneakers&bg=FF6B6B&fg=FFFFFF",
+      colors: ['#FF6B6B', '#000000', '#FFFFFF', '#FFD700']
+    },
+    {
+      id: 5,
+      name: "Classic T-Shirt",
+      price: 399,
+      image: "https://via.placeholder.com/250?text=T-Shirt&bg=667EEA&fg=FFFFFF",
+      colors: ['#667EEA', '#000000', '#FF6B6B', '#FFFFFF']
+    },
+    {
+      id: 6,
+      name: "Denim Jacket",
+      price: 1499,
+      image: "https://via.placeholder.com/250?text=Jacket&bg=4A90E2&fg=FFFFFF",
+      colors: ['#4A90E2', '#000000', '#8B4513']
+    }
+  ];
+
+  // Initialize UI
+  function init() {
+    renderProducts();
+    updateCounts();
+    updateUserDisplay();
+  }
+
+  function renderProducts() {
+    const container = document.getElementById('productList');
+    container.innerHTML = products.map(p => `
+      <div class="card">
+        <button class="wishlist-btn ${wishlist.find(w => w.id === p.id) ? 'active' : ''}" 
+                onclick="toggleWishlist(event, ${p.id})">
+          <i class="fas fa-heart"></i>
+        </button>
+        <img src="${p.image}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p class="price">₹${p.price}</p>
+        <div class="colors">
+          ${p.colors.map((color, idx) => `
+            <div class="color-dot ${idx === 0 ? 'selected' : ''}" 
+                 style="background: ${color}" 
+                 onclick="selectColor(this)"></div>
+          `).join('')}
+        </div>
+        <div class="card-buttons">
+          <button class="btn-primary" onclick="addToCart(${p.id}, '${p.name}')">
+            <i class="fas fa-plus"></i> Add to Cart
+          </button>
+          <button class="btn-secondary" onclick="viewDetails(${p.id})">
+            View Details
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function selectColor(element) {
+    element.parentElement.querySelectorAll('.color-dot').forEach(dot => {
+      dot.classList.remove('selected');
+    });
+    element.classList.add('selected');
+  }
+
+  function addToCart(productId, productName) {
+    const product = products.find(p => p.id === productId);
+    const selectedColor = document.querySelector(`.card:has([onclick*="addToCart(${productId})"]) .color-dot.selected`);
+    const color = selectedColor ? selectedColor.style.backgroundColor : '#000000';
+    
+    const existingItem = cart.find(item => item.id === productId && item.color === color);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: productId,
+        name: productName,
+        price: product.price,
+        color: color,
+        quantity: 1
+      });
+    }
+    
+    saveCart();
+    updateCounts();
+    showNotification(`${productName} added to cart!`);
+  }
+
+  function toggleWishlist(event, productId) {
+    event.stopPropagation();
+    const product = products.find(p => p.id === productId);
+    const existingIndex = wishlist.findIndex(w => w.id === productId);
+    
+    if (existingIndex > -1) {
+      wishlist.splice(existingIndex, 1);
+      event.target.closest('.wishlist-btn').classList.remove('active');
+      showNotification(`${product.name} removed from wishlist`);
+    } else {
+      wishlist.push({
+        id: productId,
+        name: product.name,
+        price: product.price
+      });
+      event.target.closest('.wishlist-btn').classList.add('active');
+      showNotification(`${product.name} added to wishlist!`);
+    }
+    
+    saveWishlist();
+    updateCounts();
+  }
+
+  function viewCart() {
+    renderCartItems();
+    document.getElementById('cartModal').classList.add('active');
+  }
+
+  function closeCart() {
+    document.getElementById('cartModal').classList.remove('active');
+  }
+
+  function renderCartItems() {
+    const cartList = document.getElementById('cartList');
+    
+    if (cart.length === 0) {
+      cartList.innerHTML = '<div class="empty-message"><i class="fas fa-shopping-cart" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>Your cart is empty</div>';
+      document.getElementById('cartTotal').textContent = 'Total: ₹0';
+      return;
+    }
+    
+    cartList.innerHTML = cart.map((item, idx) => `
+      <div class="item">
+        <div class="item-info">
+          <div class="item-name">${item.name}</div>
+          <div class="item-color">Color: <span style="background: ${item.color}; width: 15px; height: 15px; display: inline-block; border-radius: 3px;"></span></div>
+          <div>Qty: ${item.quantity}</div>
+          <div class="item-price">₹${item.price * item.quantity}</div>
+        </div>
+        <button class="remove-btn" onclick="removeFromCart(${idx})">Remove</button>
+      </div>
+    `).join('');
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('cartTotal').textContent = `Total: ₹${total}`;
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCartItems();
+    updateCounts();
+  }
+
+  function viewWishlist() {
+    renderWishlistItems();
+    document.getElementById('wishlistModal').classList.add('active');
+  }
+
+  function closeWishlist() {
+    document.getElementById('wishlistModal').classList.remove('active');
+  }
+
+  function renderWishlistItems() {
+    const wishlistList = document.getElementById('wishlistList');
+    
+    if (wishlist.length === 0) {
+      wishlistList.innerHTML = '<div class="empty-message"><i class="fas fa-heart" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>Your wishlist is empty</div>';
+      return;
+    }
+    
+    wishlistList.innerHTML = wishlist.map((item, idx) => `
+      <div class="item">
+        <div class="item-info">
+          <div class="item-name">${item.name}</div>
+          <div class="item-price">₹${item.price}</div>
+        </div>
+        <button class="remove-btn" onclick="removeFromWishlist(${idx})">Remove</button>
+      </div>
+    `).join('');
+  }
+
+  function removeFromWishlist(index) {
+    wishlist.splice(index, 1);
+    saveWishlist();
+    renderWishlistItems();
+    updateCounts();
+    renderProducts();
+  }
+
+  function showLoginModal() {
+    if (!currentUser) {
+      document.getElementById('loginModal').classList.add('active');
+    }
+  }
+
+  function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+  }
+
+  function handleLogin(event) {
+    event.preventDefault();
+    const email = event.target.querySelector('input[type="email"]').value;
+    currentUser = { email, name: email.split('@')[0] };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    updateUserDisplay();
+    closeLoginModal();
+    showNotification('Logged in successfully!');
+    event.target.reset();
+  }
+
+  function updateUserDisplay() {
+    const userDisplay = document.getElementById('userDisplay');
+    if (currentUser) {
+      userDisplay.textContent = currentUser.name;
+    } else {
+      userDisplay.textContent = 'Login';
+    }
+  }
+
+  function checkout() {
+    if (!currentUser) {
+      showLoginModal();
+      return;
+    }
+    if (cart.length === 0) {
+      showNotification('Cart is empty!');
+      return;
+    }
+    showNotification('Order placed successfully! Thank you for shopping!');
+    cart = [];
+    saveCart();
+    updateCounts();
+    closeCart();
+    renderProducts();
+  }
+
+  function checkoutWhatsApp() {
+    if (cart.length === 0) {
+      showNotification('Cart is empty!');
+      return;
+    }
+
+    // Build order message
+    let orderMessage = '🛍️ *Fashion Hub Order*\n\n';
+    orderMessage += 'Items:\n';
+    
+    cart.forEach((item, idx) => {
+      orderMessage += `${idx + 1}. ${item.name}\n`;
+      orderMessage += `   Qty: ${item.quantity} | Price: ₹${item.price * item.quantity}\n`;
+    });
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    orderMessage += `\n💰 *Total: ₹${total}*\n`;
+    orderMessage += `\nPlease confirm my order. Thank you!`;
+
+    const whatsappUrl = `https://wa.me/916300665054?text=${encodeURIComponent(orderMessage)}`;
+    
+    window.open(whatsappUrl, '_blank');
+    showNotification('Redirecting to WhatsApp...');
+    
+    // Clear cart after redirecting
+    setTimeout(() => {
+      cart = [];
+      saveCart();
+      updateCounts();
+      closeCart();
+      renderProducts();
+    }, 1000);
+  }
+
+  function viewDetails(productId) {
+    const product = products.find(p => p.id === productId);
+    showNotification(`${product.name} - ₹${product.price}`);
+  }
+
+  function updateCounts() {
+    document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('wishlistCount').textContent = wishlist.length;
+  }
+
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function saveWishlist() {
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  }
+
+  function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+  }
+
+  // Initialize on load
+  window.addEventListener('load', init);
+</script>
+
+</body>
+</html>
